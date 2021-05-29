@@ -1,0 +1,8 @@
+# Based on @mail-core/platform
+
+"@mail-core/wisever":
+  icon:
+    - "⌨️"
+  npm:
+    install:
+      args: "--save"

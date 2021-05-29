@@ -1,0 +1,69 @@
+{
+  "name": "@mail-core/cli",
+  "version": "7.0.0",
+  "description": "Инструментарий для написания cli-скриптов",
+  "main": "index.js",
+  "bin": {
+    "mail-core-cli": "./cli/index.js"
+  },
+  "scripts": {
+    "cli": "./cli/run ./cli local",
+    "test": "jest",
+    "lint": "TIMING=1 eslint --fix ./ --ext .ts,.tsx",
+    "build": "npm run test && npm run build:ts",
+    "build:ts": "tsc",
+    "shebang-fix": "./cli/run ./cli/index shebang-fix",
+    "prepublishOnly": "npm run wise:guard && npm run build && npm run shebang-fix",
+    "wise:guard": "npx @mail-core/wisever guard",
+    "release": "npx @mail-core/wisever release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.corp.mail.ru:mail-core/cli.git"
+  },
+  "keywords": [
+    "npm",
+    "npx",
+    "cli",
+    "scripts"
+  ],
+  "polyfills": [
+    "Object.values"
+  ],
+  "dependencies": {
+    "@types/app-root-path": "^1.2.4",
+    "@types/inquirer": "^7.3.1",
+    "app-root-path": "^3.0.0",
+    "boxen": "^5.0.1",
+    "chalk": "^4.1.1",
+    "inquirer": "^7.3.3",
+    "open": "^7.4.2",
+    "ora": "^5.4.0",
+    "string-length": "^4.0.2",
+    "strip-ansi": "^6.0.0",
+    "type-fest": "^0.16.0",
+    "typedoc": "^0.17.8",
+    "typedoc-plugin-markdown": "^2.4.2",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@mail-core/wisever": "^2.4.2",
+    "@types/jest": "^26.0.23",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^3.9.9"
+  },
+  "maintainers": [
+    {
+      "name": "Konstantin Lebedev",
+      "email": "k.lebedev@corp.mail.ru"
+    }
+  ],
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "npx mail-core-git commit --preset=conventional --env=hook"
+    }
+  }
+}

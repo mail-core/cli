@@ -1,0 +1,12 @@
+{
+  "scope-pkg": {
+    "test": {
+      "name": "test",
+      "version": "2",
+      "props": {
+        "ov": "1",
+        "foo": 2
+      }
+    }
+  }
+}

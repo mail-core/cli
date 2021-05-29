@@ -1,0 +1,36 @@
+#!/bin/bash
+
+file=$1
+
+installTSNode() {
+	if [ ! -f "./node_modules/.bin/ts-node" ]; then
+		npm i ts-node
+	fi
+}
+
+if [ -f "$file" ] ; then
+	# `path/to/file.js` or `path/to/file.ts`
+	if [ ${file: -2} == ".js" ]; then
+		node $file ${@:2};
+	else 
+		$(installTSNode);
+		./node_modules/.bin/ts-node $file ${@:2};
+	fi
+elif [ -f "$file.js" ] ; then
+	# Path to JS-file without `.js`
+	node "$file.js" ${@:2};
+elif [ -f "$file.ts" ] ; then
+	# Path to TS-file without `.ts`
+	$(installTSNode);
+	./node_modules/.bin/ts-node "$file.ts" ${@:2};
+elif [ -f "$file/index.js" ] ; then
+	# Path to JS-folder
+	node "$file/index.js" ${@:2};
+elif [ -f "$file/index.ts" ] ; then
+	# Path to TS-folder
+	$(installTSNode);
+	./node_modules/.bin/ts-node "$file/index.ts" ${@:2};
+else
+	echo "🛑 File '$file' not found";
+	exit 2;
+fi
