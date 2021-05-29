@@ -4,6 +4,7 @@ import {mkdirSync, existsSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import { getPackageInstallType, readPackageJson, ROOT_DIR, updatePackageJson } from '../../../pkg';
 import { create } from '../create';
+import { npmInstallPackage } from '../../../command/exec';
 
 export const init = createCommand({
 	name: 'init',
@@ -57,6 +58,11 @@ export const init = createCommand({
 		}
 
 		const pkg = readPackageJson();
+		const cliPkg = readPackageJson(__dirname);
+
+		if (!pkg.dependencies || !pkg.dependencies[cliPkg.name!]) {
+			await npmInstallPackage(cliPkg.name!, true);
+		}
 
 		if (!pkg.bin) {
 			pkg.bin = './cli/index.js';

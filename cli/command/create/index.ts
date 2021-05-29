@@ -1,8 +1,8 @@
 import { createCommand } from '../../../command/command';
-import { bold } from '../../../color';
+import { bold, green } from '../../../color';
 import { resolve, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
-import { getPackageInstallType, ROOT_DIR } from '../../../pkg';
+import { getPackageInstallType, readPackageJson, ROOT_DIR } from '../../../pkg';
 
 const CLI_PATH = resolve(ROOT_DIR, 'cli');
 
@@ -65,9 +65,9 @@ export const create = createCommand({
 				`		console.important(describe);\n` +
 				`\n` +
 				`		// Prompt user for option or use default\n` +
-				`		const value = console.cli.require(options.val);\n` +
+				`		const value = await console.cli.require(options.val);\n` +
 				`\n` +
-				`		// Print 'value' with style\n` +
+				`		// Print 'value' with style and color\n` +
 				`		console.log('value:', style.bold.cyan(value), style.gray(argv.val));\n` +
 				`	},\n` +
 				`});\n` +
@@ -84,6 +84,20 @@ export const create = createCommand({
 				`$1\t${varName},\n`,
 			));
 		});
+
+		console.hr();
+		console.important('Done, use:');
+		console.list([
+			[
+				green(`npm run cli -- ${name}`),
+				'Local running (ex. for testing)',
+			],
+
+			[
+				bold.green(`npx ${readPackageJson().name} ${name}`),
+				'Production (run inside another package)',
+			],
+		]);
 	},
 });
 

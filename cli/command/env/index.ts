@@ -9,6 +9,7 @@ export const env = createCommand({
 	async handler(argv, {console, describe, style: {bold, yellow}}) {
 		const max = 16;
 
+		console.log(arguments[1]);
 		console.important(describe);
 
 		console.log(bold('argv:'.padEnd(max)), argv);

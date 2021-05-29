@@ -11,23 +11,19 @@
 
 
 ```sh
-# Устновка
-npm --save @mail-core/cli
-
 # Интеграция в любой проект
-npx mail-core-cli init
+npx @mail-core/cli init
 
-# Полезные команды
+# Создаём свою команду 👍🏻
+npx mail-core-cli create
+
+# Другие полезности
 npx mail-core-cli --help
 ```
 
 ---
 
-### CLI
-
-Основная цель — это написания cli-комманд и возможность их использования из других пакетов.
-
-##### `cli/install/index.ts`
+### API
 
 ```ts
 import { createCommand } from '@mail-core/cli';
@@ -36,61 +32,69 @@ import { createCommand } from '@mail-core/cli';
 export const install = createCommand({
 	name: 'install',
 	describe: 'Install config',
+	
 	options: {
 		autoMerge: {
 			type: 'boolean',
 			description: 'Use auto merge',
-			interactive: true,
 		},
 	},
-	handler(argv, {console}) {
-		console.log('handler:', argv);
+
+	async handler(argv, env) {
+		// argv — распаршенные аргументы
+		//
+		// env — «окружение»:
+		//  - name — названте команды
+		//  - describe — её описание
+		//  - options — описание опций, кроме этого уже содержит значения из `argv`
+		//  - console — консоль с расширенными возможностями
+		//    - console.cli — для взаимодействия с юзером
+		//    - console.spinner — обертка над Ora
+		//    - console.nl — вывод пустой строки
+		//    - console.hr — разделитель
+		//    - console.raw — ссылка на Native Console
+		//    - {log, error, warn, ...rest}
+		//  - style — просто Chalk
 	},
 });
 ```
 
-##### `cli/index.ts`
-
-```ts
-import { initCLI } from '@mail-core/cli';
-import { gitHookInstall } from '@mail-core/git/cli/hook/install';
-import { install } from './install';
-
-// Инициализируем комманды
-initCLI(
-	// CLI Env
-	{__dirname},
-	
-	// Command List
-	install,
-	{ 'git-hook': gitHookInstall }, // "git-hook-install" and etc
-);
-```
-
----
-
 ### API
 
-### `@mail-core/cli/color`
+#### Константы
 
-Terminal string styling done right, основано на [chalk](https://github.com/chalk/chalk#readme)
+- **ROOT_DIR**:`string` — Точное определения корня проекта.
+- **IS_NPX_ENV**:`boolean`
 
----
-
-### `@mail-core/cli/prompt
-
-A collection of common interactive command line user interfaces, другими словами [Inquirer.js](https://github.com/SBoudrias/Inquirer.js#readme)
 
 ---
 
-### `@mail-core/cli`
+#### Работа с package.json
 
-#### readPackageJson
+- **readPackageJson** — первым аргументом передаётся путь, относительно которого нужно искать `package.json`, по умолчанию это будет `ROOT_DIR`
+- **updatePackageJson** — обновить, первым аргументом путь, вторым обновленный `PackageJson`
+- **registerRunCommand** — регистрация `npm.scripts`
+- **runCommandByScriptHook** — по факту тот же `registerRunCommand`, но для `npm` хуков
+- **hasPackageJsonDependency** / **hasPackageJsonDevDependency** / **hasPackageJsonPeerDependency**
+- **removePackageJsonDependency** — удалить зависимость из `PackageJson`
+- **getPackageInstallType** — может вернуть:
+  - `true` — пакет установлен как основная зависимость
+  - `dev` — установлен как `DevDep`
+  - `self` — значит метод был вызван в разрабатываем пакете
+  - `false` — ничего из выше перечисленного
 
-Получить содержимое `package.json`
 
 ---
 
-#### updatePackageJson
+### Shell / Exec
 
-Обновить содержимое `package.json`
+- **spawn** — обмязка над нативным `spawn`, возвращает Promise, умеет спинер показывать (не идеально конечно, но удобно)
+
+---
+
+### npm / npx
+
+- **npxRun** — запуск `npx` команды, опять же спинер, Promise и т.п.
+- **npmRun** — запуск `npm scripts`
+- **npmInstall** — установка всех зависмостей
+- **npmInstallPackage** — установка конретного пакета
