@@ -4,7 +4,7 @@ file=$1
 
 installTSNode() {
 	if [ ! -f "./node_modules/.bin/ts-node" ]; then
-		npm i ts-node
+		npm i ts-node typescript
 	fi
 }
 

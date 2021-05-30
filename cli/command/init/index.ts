@@ -24,6 +24,15 @@ export const init = createCommand({
 		const cliDir = join(ROOT_DIR, argv.dirName);
 		const cliIndex = join(cliDir, 'index.ts');
 
+		const pkg = readPackageJson();
+		const cliPkg = readPackageJson(__dirname);
+
+		if (!pkg.dependencies || !pkg.dependencies[cliPkg.name!]) {
+			await npmInstallPackage(cliPkg.name!, true, {
+				spinner: console.spinner(`Install ${style.bold(cliPkg.name)}`),
+			});
+		}
+
 		console.spinner(`Create '${cliDir}'`).try(() => {
 			mkdirSync(cliDir, {
 				recursive: true,
@@ -57,15 +66,6 @@ export const init = createCommand({
 				name: 'demo',
 				desc: 'Demo command',
 				demo: true,
-			});
-		}
-
-		const pkg = readPackageJson();
-		const cliPkg = readPackageJson(__dirname);
-
-		if (!pkg.dependencies || !pkg.dependencies[cliPkg.name!]) {
-			await npmInstallPackage(cliPkg.name!, true, {
-				spinner: console.spinner(`Install ${style.bold(cliPkg.name)}`),
 			});
 		}
 

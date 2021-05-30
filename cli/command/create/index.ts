@@ -49,7 +49,6 @@ export const create = createCommand({
 		console.spinner(`Write '${fileName}'`).try(() => {
 			const isProd = getPackageInstallType(__dirname) === 'self';
 			const pkgName = isProd ? '../../../command/command' : '@mail-core/cli';
-			const pkgNameColor = isProd ? '../../../color' : '@mail-core/cli/color';
 
 			writeFileSync(fileName, 
 				`import {createCommand} from '${pkgName}';\n` +
