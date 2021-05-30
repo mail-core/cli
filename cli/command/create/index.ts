@@ -20,6 +20,12 @@ export const create = createCommand({
 			desc: 'Description',
 			type: 'string',
 		},
+
+		demo: {
+			desc: 'Disable process summary',
+			hidden: true,
+			type: 'boolean',
+		},
 	},
 	
 	async handler(argv, {console, describe, style}) {
@@ -85,15 +91,17 @@ export const create = createCommand({
 			));
 		});
 
-		addProcessSummary(
-			'Local running',
-			style.cyan(`npm run cli -- ${name}`),
-		);
+		if (!argv.demo) {
+			addProcessSummary(
+				'Local running',
+				style.cyan(`npm run cli -- ${name}`),
+			);
 
-		addProcessSummary(
-			'Production (run inside another package)',
-			style.cyan(`npx ${readPackageJson().name} ${name}`),
-		);
+			addProcessSummary(
+				'Production (run inside another package)',
+				style.cyan(`npx ${readPackageJson().name} ${name}`),
+			);
+		}
 	},
 });
 

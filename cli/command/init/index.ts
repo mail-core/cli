@@ -54,6 +54,7 @@ export const init = createCommand({
 				_: argv._,
 				name: 'demo',
 				desc: 'Demo command',
+				demo: true,
 			});
 		}
 
@@ -84,6 +85,11 @@ export const init = createCommand({
 		addProcessSummary(
 			'Production (run inside another package)',
 			style.cyan(`npx ${binName} --help`),
+		);
+		
+		addProcessSummary(
+			'Run demo command',
+			style.cyan(`npm run cli -- demo`),
 		);
 	},
 });
