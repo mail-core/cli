@@ -1,8 +1,8 @@
 import { createCommand } from '../../../command/command';
-import { bold, green } from '../../../color';
 import { resolve, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { getPackageInstallType, readPackageJson, ROOT_DIR } from '../../../pkg';
+import { addProcessSummary } from '../../../process/summary';
 
 const CLI_PATH = resolve(ROOT_DIR, 'cli');
 
@@ -22,7 +22,7 @@ export const create = createCommand({
 		},
 	},
 	
-	async handler(argv, {console, describe}) {
+	async handler(argv, {console, describe, style}) {
 		console.important(describe);
 
 		const name = argv.name || await console.cli.input('Enter name:', '');
@@ -75,7 +75,7 @@ export const create = createCommand({
 			);
 		});
 
-		console.spinner(`Register '${bold(name)}' command`).try(() => {
+		console.spinner(`Register '${style.bold(name)}' command`).try(() => {
 			const index = join(CLI_PATH, 'index.ts');
 			
 			writeFileSync(index, `${readFileSync(index)}`.replace(
@@ -85,19 +85,15 @@ export const create = createCommand({
 			));
 		});
 
-		console.hr();
-		console.important('Done, use:');
-		console.list([
-			[
-				green(`npm run cli -- ${name}`),
-				'Local running (ex. for testing)',
-			],
+		addProcessSummary(
+			'Local running',
+			style.cyan(`npm run cli -- ${name}`),
+		);
 
-			[
-				bold.green(`npx ${readPackageJson().name} ${name}`),
-				'Production (run inside another package)',
-			],
-		]);
+		addProcessSummary(
+			'Production (run inside another package)',
+			style.cyan(`npx ${readPackageJson().name} ${name}`),
+		);
 	},
 });
 

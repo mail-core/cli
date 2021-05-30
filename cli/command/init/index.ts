@@ -1,10 +1,10 @@
 import {createCommand, execCommand} from '../../../command/command';
-import {bold, green} from '../../../color';
 import {mkdirSync, existsSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import { getPackageInstallType, readPackageJson, ROOT_DIR, updatePackageJson } from '../../../pkg';
 import { create } from '../create';
 import { npmInstallPackage } from '../../../command/exec';
+import { addProcessSummary } from '../../../process/summary';
 
 export const init = createCommand({
 	name: 'init',
@@ -18,7 +18,7 @@ export const init = createCommand({
 		},
 	},
 
-	async handler(argv, {console, describe}) {
+	async handler(argv, {console, describe, style}) {
 		console.important(describe);
 		
 		const cliDir = join(ROOT_DIR, argv.dirName);
@@ -76,12 +76,15 @@ export const init = createCommand({
 
 		const binName = typeof pkg.bin === 'string' ? pkg.name : Object.keys(pkg.bin!)[0];
 
-		console.hr();
-		console.important('Done, use:');
-		console.list([
-			[green('npm run cli -- --help'), 'Local running (ex. for testing)'],
-			[bold.green(`npx ${binName} --help`), 'Production (run inside another package)'],
-		]);
+		addProcessSummary(
+			'Local running',
+			style.cyan(`npm run cli -- --help`),
+		);
+
+		addProcessSummary(
+			'Production (run inside another package)',
+			style.cyan(`npx ${binName} --help`),
+		);
 	},
 });
 
