@@ -1,6 +1,6 @@
 {
   "name": "@mail-core/cli",
-  "version": "7.1.0-rc.1",
+  "version": "7.1.0",
   "description": "Инструментарий для написания cli-скриптов",
   "main": "index.js",
   "bin": {

@@ -49,6 +49,8 @@ export const init = createCommand({
 				);
 			});
 
+			console.hr();
+
 			await execCommand(create, {
 				$0: argv.$0,
 				_: argv._,
@@ -84,6 +86,11 @@ export const init = createCommand({
 		const binName = typeof pkg.bin === 'string' ? pkg.name : Object.keys(pkg.bin!)[0];
 
 		addProcessSummary(
+			'Run demo command',
+			style.cyan(`npm run cli -- demo`),
+		);
+
+		addProcessSummary(
 			'Local running',
 			style.cyan(`npm run cli -- --help`),
 		);
@@ -91,11 +98,6 @@ export const init = createCommand({
 		addProcessSummary(
 			'Production (run inside another package)',
 			style.cyan(`npx ${binName} --help`),
-		);
-		
-		addProcessSummary(
-			'Run demo command',
-			style.cyan(`npm run cli -- demo`),
 		);
 	},
 });
