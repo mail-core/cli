@@ -62,7 +62,9 @@ export const init = createCommand({
 		const cliPkg = readPackageJson(__dirname);
 
 		if (!pkg.dependencies || !pkg.dependencies[cliPkg.name!]) {
-			await npmInstallPackage(cliPkg.name!, true);
+			await npmInstallPackage(cliPkg.name!, true, {
+				spinner: console.spinner(`Install ${style.bold(cliPkg.name)}`),
+			});
 		}
 
 		if (!pkg.bin) {
@@ -70,8 +72,12 @@ export const init = createCommand({
 			updatePackageJson(undefined, pkg);
 		}
 
-		if (!pkg.scripts?.cli || /mail-core-cli/.test(pkg.scripts?.cli)) {
-			pkg.scripts!.cli = 'npx mail-core-cli local';
+		if (pkg.scripts == null) {
+			pkg.scripts = {};
+		}
+
+		if (!pkg.scripts.cli || /mail-core-cli/.test(pkg.scripts.cli)) {
+			pkg.scripts.cli = 'npx mail-core-cli local';
 			updatePackageJson(undefined, pkg);
 		}
 
