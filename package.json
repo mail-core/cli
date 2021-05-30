@@ -1,6 +1,6 @@
 {
   "name": "@mail-core/cli",
-  "version": "7.0.0",
+  "version": "7.1.0-rc.1",
   "description": "Инструментарий для написания cli-скриптов",
   "main": "index.js",
   "bin": {
@@ -42,8 +42,6 @@
     "string-length": "^4.0.2",
     "strip-ansi": "^6.0.0",
     "type-fest": "^0.16.0",
-    "typedoc": "^0.17.8",
-    "typedoc-plugin-markdown": "^2.4.2",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
