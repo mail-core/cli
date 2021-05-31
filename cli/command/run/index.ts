@@ -23,7 +23,7 @@ export function runFile(console: ExtendedConsole, file: string, args: string[], 
 
 	child.on('close', (code) => {
 		console.verbose(`Exit code:`, code);
-		process.exit(code);
+		process.exit(code!);
 	});
 
 	return child;
