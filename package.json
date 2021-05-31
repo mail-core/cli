@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.corp.mail.ru:mail-core/cli.git"
+    "url": "git@github.com:mail-core/cli.git"
   },
   "keywords": [
     "npm",
